@@ -1,5 +1,4 @@
 ﻿using MagicVilla.Service.Data;
-using MagicVilla.Service.Logging;
 using MagicVilla.Service.Models.Villa;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +10,6 @@ namespace MagicVilla.Service.Controllers
     public class VillaApiController : Controller
     {
         //private readonly ILogging _logger;
-
-        public VillaApiController(ILogging logger)
-        {
-            _logger = logger;
-        }
 
         [HttpGet]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
