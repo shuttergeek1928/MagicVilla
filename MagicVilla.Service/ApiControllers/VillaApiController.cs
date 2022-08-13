@@ -20,15 +20,15 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<VillaDTO>> GetVillas()
+        public ActionResult<IEnumerable<VillaViewModel>> GetVillas()
         {
             IEnumerable<VillaModel> villaList = _context.Villa.ToList();
             
-            return Ok(_mapper.Map<List<VillaDTO>>(villaList));
+            return Ok(_mapper.Map<List<VillaViewModel>>(villaList));
         }
 
         [HttpGet("{id:Guid}")]
-        public ActionResult<VillaDTO> GetVillaByName(Guid id)
+        public ActionResult<VillaViewModel> GetVillaByName(Guid id)
         {
             if (id == Guid.Empty)
                 return BadRequest();
@@ -38,11 +38,11 @@ namespace MagicVilla.Service.Controllers
             if (villa == null)
                 return NotFound();
 
-            return Ok(_mapper.Map<VillaDTO>(villa));
+            return Ok(_mapper.Map<VillaViewModel>(villa));
         }
 
         [HttpPost]
-        public ActionResult<VillaDTO> CreateNewVilla([FromBody] VillaCreateModel villa)
+        public ActionResult<VillaViewModel> CreateNewVilla([FromBody] VillaCreateModel villa)
         {
             if (!ModelState.IsValid)
             {
@@ -123,7 +123,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpPatch]
-        public ActionResult UpdatePartialVilla(Guid id, JsonPatchDocument<VillaDTO> patchVilla)
+        public ActionResult UpdatePartialVilla(Guid id, JsonPatchDocument<VillaViewModel> patchVilla)
         {
             if (patchVilla == null)
                 return BadRequest();

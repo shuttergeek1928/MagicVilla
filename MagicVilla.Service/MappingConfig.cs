@@ -7,8 +7,8 @@ namespace MagicVilla.Service
     {
         public MappingConfig()
         {
-            CreateMap<VillaModel, VillaDTO>();
-            CreateMap<VillaDTO, VillaModel>();
+            CreateMap<VillaModel, VillaViewModel>();
+            CreateMap<VillaViewModel, VillaModel>();
 
             CreateMap<VillaModel, VillaCreateModel>().ReverseMap();
         }

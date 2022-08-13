@@ -2,7 +2,7 @@
 
 namespace MagicVilla.Service.Models.Villa
 {
-    public class VillaDTO
+    public class VillaViewModel
     {
         [Required]
         public Guid Id { get; set; }
