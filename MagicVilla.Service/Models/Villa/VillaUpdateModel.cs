@@ -2,7 +2,7 @@
 
 namespace MagicVilla.Service.Models.Villa
 {
-    public class VillaCreateModel
+    public class VillaUpdateModel
     {
         [Required]
         [MaxLength(50)]
