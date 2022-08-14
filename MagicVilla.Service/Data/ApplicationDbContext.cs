@@ -1,4 +1,5 @@
 ﻿using MagicVilla.Service.Models.Villa;
+using MagicVilla.Service.Models.VillaNumber;
 using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla.Service.Data
@@ -9,6 +10,7 @@ namespace MagicVilla.Service.Data
         {
         }
         public DbSet<VillaModel> Villa { get; set; }
+        public DbSet<VillaNumberModel> VillaNumber { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +40,16 @@ namespace MagicVilla.Service.Data
                     ImageUrl = "https://e8rbh6por3n.exactdn.com/sites/uploads/2020/05/villa-la-gi-thumbnail.jpg?strip=all&lossy=1&ssl=1",
                     CreatedDate = DateTime.Now,
                     LastUpdate = DateTime.Now
+                }
+                );
+
+            modelBuilder.Entity<VillaNumberModel>().HasData(
+                new VillaNumberModel()
+                {
+                    VillaNumber = 1,
+                    SpecialDetails = "Luxury.",
+                    CreatedDate = DateTime.Now,
+                    LastUpdated = DateTime.Now
                 }
                 );
         }

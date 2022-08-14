@@ -4,6 +4,7 @@ using MagicVilla.Service.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicVilla.Service.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220814052832_addedVillaNumber")]
+    partial class addedVillaNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,26 +68,26 @@ namespace MagicVilla.Service.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5b0ab470-03b9-4af1-be0e-f3f95e2d5362"),
+                            Id = new Guid("c3f2a79f-5a39-4c28-9977-031f3c222efd"),
                             Amenities = "Pool, Gym, Bar",
                             Area = 750.00m,
-                            CreatedDate = new DateTime(2022, 8, 14, 22, 51, 17, 75, DateTimeKind.Local).AddTicks(5631),
+                            CreatedDate = new DateTime(2022, 8, 14, 10, 58, 31, 900, DateTimeKind.Local).AddTicks(1761),
                             Details = "Unmatched authentic luxury.",
                             ImageUrl = "https://e8rbh6por3n.exactdn.com/sites/uploads/2020/05/villa-la-gi-thumbnail.jpg?strip=all&lossy=1&ssl=1",
-                            LastUpdate = new DateTime(2022, 8, 14, 22, 51, 17, 75, DateTimeKind.Local).AddTicks(5647),
+                            LastUpdate = new DateTime(2022, 8, 14, 10, 58, 31, 900, DateTimeKind.Local).AddTicks(1771),
                             Name = "Bliss View",
                             Occupancy = 5,
                             Rate = 500.00m
                         },
                         new
                         {
-                            Id = new Guid("a93c77ec-f40b-472c-a042-9e03f56a5660"),
+                            Id = new Guid("50e0f3f3-8c88-41f1-9fb4-2d29d756bb0c"),
                             Amenities = "Pool, Gym, Bar",
                             Area = 1000.00m,
-                            CreatedDate = new DateTime(2022, 8, 14, 22, 51, 17, 75, DateTimeKind.Local).AddTicks(5650),
+                            CreatedDate = new DateTime(2022, 8, 14, 10, 58, 31, 900, DateTimeKind.Local).AddTicks(1775),
                             Details = "Moment Creating.",
                             ImageUrl = "https://e8rbh6por3n.exactdn.com/sites/uploads/2020/05/villa-la-gi-thumbnail.jpg?strip=all&lossy=1&ssl=1",
-                            LastUpdate = new DateTime(2022, 8, 14, 22, 51, 17, 75, DateTimeKind.Local).AddTicks(5651),
+                            LastUpdate = new DateTime(2022, 8, 14, 10, 58, 31, 900, DateTimeKind.Local).AddTicks(1776),
                             Name = "Mountain View",
                             Occupancy = 3,
                             Rate = 1000.00m
@@ -107,35 +109,9 @@ namespace MagicVilla.Service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("VillaId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("VillaNumber");
 
-                    b.HasIndex("VillaId");
-
                     b.ToTable("VillaNumber");
-
-                    b.HasData(
-                        new
-                        {
-                            VillaNumber = 1,
-                            CreatedDate = new DateTime(2022, 8, 14, 22, 51, 17, 75, DateTimeKind.Local).AddTicks(5781),
-                            LastUpdated = new DateTime(2022, 8, 14, 22, 51, 17, 75, DateTimeKind.Local).AddTicks(5782),
-                            SpecialDetails = "Luxury.",
-                            VillaId = new Guid("00000000-0000-0000-0000-000000000000")
-                        });
-                });
-
-            modelBuilder.Entity("MagicVilla.Service.Models.VillaNumber.VillaNumberModel", b =>
-                {
-                    b.HasOne("MagicVilla.Service.Models.Villa.VillaModel", "Villa")
-                        .WithMany()
-                        .HasForeignKey("VillaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Villa");
                 });
 #pragma warning restore 612, 618
         }

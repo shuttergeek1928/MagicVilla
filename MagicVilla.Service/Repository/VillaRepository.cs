@@ -7,55 +7,21 @@ using System.Linq.Expressions;
 
 namespace MagicVilla.Service.Repository
 {
-    public class VillaRepository : IVillaRepository
+    public class VillaRepository : Repository<VillaModel>, IVillaRepository
     {
         private readonly ApplicationDbContext _context;
-        public VillaRepository(ApplicationDbContext context)
+        public VillaRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
-
-        public VillaModel Get(Expression<Func<VillaModel, bool>> filter = null, bool tracked = true)
+        public VillaModel Update(VillaModel villa)
         {
-            IQueryable<VillaModel> entities = _context.Villa;
+            villa.LastUpdate = DateTime.Now;
 
-            if (!tracked)
-                entities = entities.AsNoTracking();
-
-            if (filter != null)
-                entities = entities.Where(filter);
-
-            return entities.FirstOrDefault();
-        }
-
-        public List<VillaModel> GetAll(Expression<Func<VillaModel, bool>> filter = null)
-        {
-            IQueryable<VillaModel> entities = _context.Villa;
-
-            if (filter != null)
-                entities = entities.Where(filter);
-
-            return entities.ToList();
-        }
-
-        public void Create(VillaModel villa)
-        {
-            _context.Villa.Add(villa);
-            Save();
-        }
-
-        public void Update(VillaModel villa)
-        {
             _context.Villa.Update(villa);
             Save();
+            return villa;
         }
-
-        public void Remove(VillaModel villa)
-        {
-            _context.Remove(villa);
-            Save();
-        }
-
         public void Save() => _context.SaveChanges();
     }
 }
