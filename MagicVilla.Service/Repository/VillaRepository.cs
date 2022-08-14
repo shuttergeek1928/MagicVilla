@@ -1,6 +1,6 @@
 ﻿using MagicVilla.Service.Data;
 using MagicVilla.Service.Models.Villa;
-using MagicVilla.Service.Repository.IRepository;
+using MagicVilla.Service.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -15,13 +15,7 @@ namespace MagicVilla.Service.Repository
             _context = context;
         }
 
-        public void Create(VillaModel villa)
-        {
-            _context.Villa.Add(villa);
-            Save();
-        }
-
-        public ActionResult<VillaModel> Get(Expression<Func<VillaModel, bool>> filter = null, bool tracked = true)
+        public VillaModel Get(Expression<Func<VillaModel, bool>> filter = null, bool tracked = true)
         {
             IQueryable<VillaModel> entities = _context.Villa;
 
@@ -34,7 +28,7 @@ namespace MagicVilla.Service.Repository
             return entities.FirstOrDefault();
         }
 
-        public ActionResult<List<VillaModel>> GetAll(Expression<Func<VillaModel, bool>> filter = null)
+        public List<VillaModel> GetAll(Expression<Func<VillaModel, bool>> filter = null)
         {
             IQueryable<VillaModel> entities = _context.Villa;
 
@@ -42,6 +36,18 @@ namespace MagicVilla.Service.Repository
                 entities = entities.Where(filter);
 
             return entities.ToList();
+        }
+
+        public void Create(VillaModel villa)
+        {
+            _context.Villa.Add(villa);
+            Save();
+        }
+
+        public void Update(VillaModel villa)
+        {
+            _context.Villa.Update(villa);
+            Save();
         }
 
         public void Remove(VillaModel villa)

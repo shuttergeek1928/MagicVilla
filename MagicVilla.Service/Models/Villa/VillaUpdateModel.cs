@@ -19,5 +19,6 @@ namespace MagicVilla.Service.Models.Villa
         public int Occupancy { get; set; }
         public string Amenities { get; set; }
         public string ImageUrl { get; set; }
+        public DateTime LastUpdate { get; set; }
     }
 }
