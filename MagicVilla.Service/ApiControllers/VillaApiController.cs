@@ -3,6 +3,7 @@ using MagicVilla.Service.Data;
 using MagicVilla.Service.Models;
 using MagicVilla.Service.Models.Villa;
 using MagicVilla.Service.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -25,6 +26,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult<APIResponse> GetVillas()
         {
             try
@@ -47,6 +49,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpGet("{id:Guid}")]
+        [Authorize]
         public ActionResult<APIResponse> GetVillaById(Guid id)
         {
             
@@ -76,6 +79,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public ActionResult<APIResponse> CreateNewVilla([FromBody] VillaCreateModel villa)
         {
             if (!ModelState.IsValid)
@@ -88,24 +92,11 @@ namespace MagicVilla.Service.Controllers
 
             try
             {
-                /*
-                var newVilla = new VillaModel()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = villa.Name,
-                    Details = villa.Details,
-                    Rate = villa.Rate,
-                    Area = villa.Area,
-                    Occupancy = villa.Occupancy,
-                    Amenities = villa.Amenities,
-                    ImageUrl = villa.ImageUrl,
-                    CreatedDate = DateTime.Now,
-                    LastUpdate = DateTime.Now
-                };
-                */
-
-
                 VillaModel newVilla = _mapper.Map<VillaModel>(villa);
+
+                newVilla.CreatedDate = DateTime.Now;
+
+                newVilla.LastUpdate = DateTime.Now;
 
                 _villaContext.Create(newVilla);
 
@@ -127,6 +118,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpDelete("{id:Guid}")]
+        [Authorize(Roles = "admin")]
         public ActionResult<APIResponse> DeleteVilla(Guid id)
         {
             if (id == Guid.Empty)
@@ -159,6 +151,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "manager")]
         public ActionResult<APIResponse> UpdateVilla(Guid id, [FromBody] VillaUpdateModel updateVilla)
         {
             if (id == Guid.Empty)
@@ -171,17 +164,6 @@ namespace MagicVilla.Service.Controllers
 
             try
             {
-                /*
-                villa.Name = updateVilla.Name;
-                villa.Details = updateVilla.Details;
-                villa.Rate = updateVilla.Rate;
-                villa.Area = updateVilla.Area;
-                villa.Occupancy = updateVilla.Occupancy;
-                villa.Amenities = updateVilla.Amenities;
-                villa.ImageUrl = updateVilla.ImageUrl;
-                villa.LastUpdate = DateTime.Now;
-                */
-
                 updateVilla.LastUpdate = DateTime.Now;
 
                 villa = _mapper.Map<VillaModel>(updateVilla);

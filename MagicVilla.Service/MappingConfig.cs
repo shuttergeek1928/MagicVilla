@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using MagicVilla.Service.Models.Authentications;
+using MagicVilla.Service.Models.Registration;
 using MagicVilla.Service.Models.Villa;
 using MagicVilla.Service.Models.VillaNumber;
 
@@ -17,6 +19,8 @@ namespace MagicVilla.Service
             CreateMap<VillaNumberModel, VillaNumberViewModel>().ReverseMap();
             CreateMap<VillaNumberModel, VillaNumberCreateModel>().ReverseMap();
             CreateMap<VillaNumberModel, VillaNumberUpdateModel>().ReverseMap();
+
+            CreateMap<RegistrationRequestModel, Users>();
         }
     }
 }

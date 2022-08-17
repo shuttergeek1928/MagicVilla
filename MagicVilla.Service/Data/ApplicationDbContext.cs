@@ -1,4 +1,5 @@
-﻿using MagicVilla.Service.Models.Villa;
+﻿using MagicVilla.Service.Models.Authentications;
+using MagicVilla.Service.Models.Villa;
 using MagicVilla.Service.Models.VillaNumber;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,8 @@ namespace MagicVilla.Service.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+
+        public DbSet<Users> Users { get; set; }
         public DbSet<VillaModel> Villa { get; set; }
         public DbSet<VillaNumberModel> VillaNumber { get; set; }
 
