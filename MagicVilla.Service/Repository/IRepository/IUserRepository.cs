@@ -1,6 +1,5 @@
 ﻿using MagicVilla.Service.Models.Authentications;
 using MagicVilla.Service.Models.Registration;
-using MagicVilla.Service.Models;
 namespace MagicVilla.Service.Repository.IRepository
 {
     public interface IUserRepository

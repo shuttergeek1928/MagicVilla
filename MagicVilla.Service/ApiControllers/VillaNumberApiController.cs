@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using MagicVilla.Service.Data;
 using MagicVilla.Service.Models;
-using MagicVilla.Service.Models.Villa;
 using MagicVilla.Service.Models.VillaNumber;
 using MagicVilla.Service.Repository;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 namespace MagicVilla.Service.ApiControllers
@@ -39,7 +36,7 @@ namespace MagicVilla.Service.ApiControllers
 
                 return Ok(_response);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _response.IsSuccess = false;
 

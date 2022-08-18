@@ -39,7 +39,7 @@ namespace MagicVilla.Service.Controllers
 
                 return Ok(_response);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _response.IsSuccess = false;
                 _response.Errors = new List<string>() { e.ToString() };
@@ -52,7 +52,7 @@ namespace MagicVilla.Service.Controllers
         [Authorize]
         public ActionResult<APIResponse> GetVillaById(Guid id)
         {
-            
+
             if (id == Guid.Empty)
                 return BadRequest();
 
@@ -61,7 +61,8 @@ namespace MagicVilla.Service.Controllers
             if (villa == null)
                 return NotFound();
 
-            try { 
+            try
+            {
                 _response.Result = _mapper.Map<List<VillaViewModel>>(villa);
 
                 _response.StatusCode = HttpStatusCode.OK;

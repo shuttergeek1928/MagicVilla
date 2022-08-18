@@ -1,7 +1,5 @@
 ﻿using MagicVilla.Service.Data;
 using MagicVilla.Service.Models.VillaNumber;
-using MagicVilla.Service.Repository;
-using Microsoft.AspNetCore.Mvc;
 
 namespace MagicVilla.Service.Repository
 {
@@ -18,7 +16,7 @@ namespace MagicVilla.Service.Repository
             entity.LastUpdated = DateTime.Now;
 
             _context.Update(entity);
-            
+
             _context.SaveChanges();
 
             return entity;

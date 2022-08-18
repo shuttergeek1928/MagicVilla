@@ -24,8 +24,8 @@ namespace MagicVilla.Service.Repository
         public bool IsUniqueUser(int accountId)
         {
             var user = _context.Users.FirstOrDefault(x => x.AccountId == accountId);
-            
-            if(user == null)
+
+            if (user == null)
                 return true;
 
             return false;
@@ -45,8 +45,8 @@ namespace MagicVilla.Service.Repository
 
             LogonResponseModel logonResponseModel = new LogonResponseModel()
             {
-               Token = authorizationClient.Token,
-               User = user
+                Token = authorizationClient.Token,
+                User = user
             };
 
             return logonResponseModel;
@@ -57,8 +57,8 @@ namespace MagicVilla.Service.Repository
             var newUserAccountId = 1;
 
             var lastAccount = _context.Users.OrderByDescending(x => x.AccountId).FirstOrDefault();
-            
-            if(lastAccount != null)
+
+            if (lastAccount != null)
                 newUserAccountId = lastAccount.AccountId + 1;
 
             if (!IsUniqueUser(newUserAccountId))
