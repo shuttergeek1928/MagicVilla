@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MagicVilla.Service.Models.Authentications
+namespace MagicVilla.Web.Models.Authentications
 {
     public class LogonRequestModel
     {

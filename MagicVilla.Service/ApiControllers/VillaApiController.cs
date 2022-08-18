@@ -190,6 +190,7 @@ namespace MagicVilla.Service.Controllers
             return _response;
         }
 
+        /*
         [HttpPatch]
         public ActionResult UpdatePartialVilla(Guid id, JsonPatchDocument<VillaViewModel> patchVilla)
         {
@@ -208,5 +209,6 @@ namespace MagicVilla.Service.Controllers
 
             return NoContent();
         }
+        */
     }
 }

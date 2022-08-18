@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MagicVilla.Service.Models.Registration
+namespace MagicVilla.Web.Models.Registration
 {
     public class RegistrationRequestModel
     {

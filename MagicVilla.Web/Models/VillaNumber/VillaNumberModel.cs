@@ -1,8 +1,8 @@
-﻿using MagicVilla.Service.Models.Villa;
+﻿using MagicVilla.Web.Models.Villa;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MagicVilla.Service.Models.VillaNumber
+namespace MagicVilla.Web.Models.VillaNumber
 {
     public class VillaNumberModel
     {

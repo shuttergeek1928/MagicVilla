@@ -1,4 +1,4 @@
-﻿namespace MagicVilla.Service.Models.Authentications
+﻿namespace MagicVilla.Web.Models.Authentications
 {
     public class LogonResponseModel
     {

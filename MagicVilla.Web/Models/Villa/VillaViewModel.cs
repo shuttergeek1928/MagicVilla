@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MagicVilla.Service.Models.Villa
+namespace MagicVilla.Web.Models.Villa
 {
     public class VillaViewModel
     {
