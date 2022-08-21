@@ -7,7 +7,7 @@ namespace MagicVilla.Web.Models.Villa
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
-        public string Details { get; set; }
+        public string? Details { get; set; }
 
         [Required]
         public decimal Rate { get; set; }
@@ -17,7 +17,7 @@ namespace MagicVilla.Web.Models.Villa
 
         [Required]
         public int Occupancy { get; set; }
-        public string Amenities { get; set; }
-        public string ImageUrl { get; set; }
+        public string? Amenities { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

@@ -26,7 +26,6 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public ActionResult<APIResponse> GetVillas()
         {
             try
@@ -49,7 +48,6 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpGet("{id:Guid}")]
-        [Authorize]
         public ActionResult<APIResponse> GetVillaById(Guid id)
         {
 
@@ -63,7 +61,7 @@ namespace MagicVilla.Service.Controllers
 
             try
             {
-                _response.Result = _mapper.Map<List<VillaViewModel>>(villa);
+                _response.Result = _mapper.Map<VillaViewModel>(villa);
 
                 _response.StatusCode = HttpStatusCode.OK;
 
@@ -80,7 +78,6 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
         public ActionResult<APIResponse> CreateNewVilla([FromBody] VillaCreateModel villa)
         {
             if (!ModelState.IsValid)
@@ -119,7 +116,6 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpDelete("{id:Guid}")]
-        [Authorize(Roles = "admin")]
         public ActionResult<APIResponse> DeleteVilla(Guid id)
         {
             if (id == Guid.Empty)
@@ -152,7 +148,6 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "manager")]
         public ActionResult<APIResponse> UpdateVilla(Guid id, [FromBody] VillaUpdateModel updateVilla)
         {
             if (id == Guid.Empty)
@@ -167,11 +162,9 @@ namespace MagicVilla.Service.Controllers
             {
                 updateVilla.LastUpdate = DateTime.Now;
 
-                villa = _mapper.Map<VillaModel>(updateVilla);
+                villa = _mapper.Map<VillaUpdateModel, VillaModel>(updateVilla, villa);
 
                 _villaContext.Update(villa);
-
-                _villaContext.Save();
 
                 _response.Result = villa;
 
@@ -212,3 +205,4 @@ namespace MagicVilla.Service.Controllers
         */
     }
 }
+

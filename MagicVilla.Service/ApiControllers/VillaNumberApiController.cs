@@ -93,12 +93,6 @@ namespace MagicVilla.Service.ApiControllers
                 return BadRequest(ModelState);
             }
 
-            if (_villaContext.Get(x => x.Id == createVillaNumber.VillaId) == null)
-            {
-                ModelState.AddModelError("CustomError", "Villa id does not exist");
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 createVillaNumber.CreatedDate = DateTime.Now;
