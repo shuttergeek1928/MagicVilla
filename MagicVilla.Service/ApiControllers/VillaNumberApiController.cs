@@ -24,11 +24,11 @@ namespace MagicVilla.Service.ApiControllers
         }
 
         [HttpGet]
-        public ActionResult<APIResponse> GetAllVillaNumbers()
+        public ActionResult<APIResponse> GetAllVillaNumbers(string? includeChildProperty = null)
         {
             try
             {
-                IEnumerable<VillaNumberModel> villaNumberList = _villaNumberContext.GetAll();
+                IEnumerable<VillaNumberModel> villaNumberList = _villaNumberContext.GetAll(includeChildProperties: includeChildProperty);
 
                 _response.Result = _mapper.Map<List<VillaNumberViewModel>>(villaNumberList);
 
@@ -47,20 +47,20 @@ namespace MagicVilla.Service.ApiControllers
         }
 
         [HttpGet("{villaNumber:int}")]
-        public ActionResult<APIResponse> GetVillaNumber(int villaNumber)
+        public ActionResult<APIResponse> GetVillaNumber(int villaNumber, string? includeChildProperty = null)
         {
 
             if (villaNumber <= 0)
                 return BadRequest();
 
-            var villa = _villaNumberContext.Get(x => x.VillaNumber == villaNumber);
+            var villa = _villaNumberContext.Get(x => x.VillaNumber == villaNumber, includeChildProperties: includeChildProperty);
 
             if (villa == null)
                 return NotFound();
 
             try
             {
-                _response.Result = _mapper.Map<List<VillaNumberViewModel>>(villa);
+                _response.Result = _mapper.Map<VillaNumberViewModel>(villa);
 
                 _response.StatusCode = HttpStatusCode.OK;
 

@@ -37,21 +37,21 @@ namespace MagicVilla.Web.Services
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string? includeChildProperty = null)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.GET,
-                Uri = GetApi(_apiResource, _configuration)
+                Uri = GetApi(_apiResource, _configuration, includeChildProperty: includeChildProperty)
             });
         }
 
-        public Task<T> GetAsync<T>(int villaNumber)
+        public Task<T> GetAsync<T>(int villaNumber, string? includeChildProperty = null)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.GET,
-                Uri = GetApi(_apiResource, _configuration, villaNumber)
+                Uri = GetApi(_apiResource, _configuration, villaNumber, includeChildProperty: includeChildProperty)
             });
 
         }
@@ -66,17 +66,24 @@ namespace MagicVilla.Web.Services
             });
         }
 
-        public string GetApi(string resource, IConfiguration configuration, int? villaNumber = 0, ApiTypes.ApiType apiType = ApiTypes.ApiType.GET)
+        public string? GetApi(string resource, IConfiguration configuration, int? villaNumber = 0, ApiTypes.ApiType apiType = ApiTypes.ApiType.GET, string? includeChildProperty = "")
         {
-            if(villaNumber != null && villaNumber != 0)
+            var uri = configuration.GetValue<string>("ServiceUrls:" + resource);
+
+            if (string.IsNullOrEmpty(uri))
+                return null;
+
+            if (villaNumber != null && villaNumber != 0)
             {
                 if(apiType != ApiTypes.ApiType.PUT)
-                    return configuration.GetValue<string>("ServiceUrls:" + resource) + $"/{villaNumber}";
+                    return uri + $"/{villaNumber}";
 
-                return configuration.GetValue<string>("ServiceUrls:" + resource) + $"?villaNumber={villaNumber}";
+                return uri + $"?villaNumber={villaNumber}";
             }
 
-            return configuration.GetValue<string>("ServiceUrls:" + resource);
+            if (!string.IsNullOrEmpty(includeChildProperty))
+                return uri + $"?includeChildProperty={includeChildProperty}";
+            return uri;
         }
     }
 }

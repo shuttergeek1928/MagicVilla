@@ -16,7 +16,7 @@ namespace MagicVilla.Service.Repository
 
         }
 
-        public T Get(Expression<Func<T, bool>>? filter = null, bool tracked = true)
+        public T Get(Expression<Func<T, bool>>? filter = null, bool tracked = true, string? includeChildProperties = null)
         {
             IQueryable<T> entities = _DbContext;
 
@@ -25,16 +25,32 @@ namespace MagicVilla.Service.Repository
 
             if (filter != null)
                 entities = entities.Where(filter);
+            
+            if (includeChildProperties != null)
+            {
+                foreach(var subProperty in includeChildProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    entities = entities.Include(subProperty);
+                }
+            }
 
             return entities.FirstOrDefault();
         }
 
-        public List<T> GetAll(Expression<Func<T, bool>>? filter = null)
+        public List<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeChildProperties = null)
         {
             IQueryable<T> entities = _DbContext;
 
             if (filter != null)
                 entities = entities.Where(filter);
+
+            if (includeChildProperties != null)
+            {
+                foreach (var subProperty in includeChildProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    entities = entities.Include(subProperty);
+                }
+            }
 
             return entities.ToList();
         }

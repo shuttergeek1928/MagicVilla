@@ -22,7 +22,7 @@ namespace MagicVilla.Web.Controllers
         {
             List<VillaNumberViewModel> villaNumbers = new();
 
-            var response = await _villaNumberService.GetAllAsync<APIResponse>();
+            var response = await _villaNumberService.GetAllAsync<APIResponse>("Villa");
 
             if(response != null && response.IsSuccess)
             {

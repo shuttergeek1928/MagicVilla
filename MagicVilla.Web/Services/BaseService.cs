@@ -25,7 +25,7 @@ namespace MagicVilla.Web.Services
                 HttpRequestMessage message = new HttpRequestMessage();
 
                 message.Headers.Add("Accept", "application/json");
-
+                
                 message.RequestUri = new Uri(request.Uri);
 
                 if(request.Data != null)

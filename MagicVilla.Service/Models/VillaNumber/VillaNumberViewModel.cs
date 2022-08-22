@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MagicVilla.Service.Models.Villa;
+using System.ComponentModel.DataAnnotations;
 
 namespace MagicVilla.Service.Models.VillaNumber
 {
@@ -7,5 +8,6 @@ namespace MagicVilla.Service.Models.VillaNumber
         [Required]
         public int VillaNumber { get; set; }
         public string SpecialDetails { get; set; }
+        public VillaModel Villa { get; set; }
     }
 }
