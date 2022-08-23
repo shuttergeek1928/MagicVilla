@@ -1,9 +1,5 @@
 ﻿using MagicVilla.Service.Data;
 using MagicVilla.Service.Models.Villa;
-using MagicVilla.Service.Repository;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace MagicVilla.Service.Repository
 {

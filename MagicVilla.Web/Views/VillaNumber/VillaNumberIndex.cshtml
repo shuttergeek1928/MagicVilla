@@ -1,0 +1,50 @@
+﻿@model IEnumerable<MagicVilla.Web.Models.VillaNumber.VillaNumberViewModel>
+
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Villa Lists</h1>
+        </div>
+        <div class="col text-end pt-1">
+            <a class="btn btn-outline-primary" asp-controller="VillaNumber" asp-action="CreateVillaNumber"><i class="bi bi-plus"></i>Create New Villa Number</a>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Villa Name
+                    </th>
+                    <th>
+                        Villa Number
+                    </th>
+                    <th>
+                        Details
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Villa.Name
+                        </td>
+                        <td>
+                            @item.VillaNumber
+                        </td>
+                        <td>
+                            @item.SpecialDetails
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-success" asp-controller="VillaNumber" asp-action="UpdateVillaNumber" asp-route-villaNumber="@item.VillaNumber"><i class="bi bi-pencil"></i></a>
+                            <a class="btn btn-outline-danger" asp-controller="VillaNumber" asp-action="DeleteVillaNumber" asp-route-villaNumber="@item.VillaNumber"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

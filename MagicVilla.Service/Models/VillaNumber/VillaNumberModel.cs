@@ -19,7 +19,7 @@ namespace MagicVilla.Service.Models.VillaNumber
 
         [Required]
         public DateTime CreatedDate { get; set; }
-        
+
         [Required]
         public DateTime LastUpdated { get; set; }
     }

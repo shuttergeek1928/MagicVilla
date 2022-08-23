@@ -14,7 +14,8 @@ namespace MagicVilla.Service
             CreateMap<VillaViewModel, VillaModel>();
 
             CreateMap<VillaModel, VillaCreateModel>().ReverseMap();
-            CreateMap<VillaModel, VillaUpdateModel>().ReverseMap();
+            CreateMap<VillaModel, VillaUpdateModel>();
+            CreateMap<VillaUpdateModel, VillaModel>().ForMember(destinationModel => destinationModel.Id, options => options.Ignore());
 
             CreateMap<VillaNumberModel, VillaNumberViewModel>().ReverseMap();
             CreateMap<VillaNumberModel, VillaNumberCreateModel>().ReverseMap();

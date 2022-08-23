@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using MagicVilla.Service.Data;
 using MagicVilla.Service.Models;
-using MagicVilla.Service.Models.Villa;
 using MagicVilla.Service.Models.VillaNumber;
 using MagicVilla.Service.Repository;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 namespace MagicVilla.Service.ApiControllers
@@ -27,11 +24,11 @@ namespace MagicVilla.Service.ApiControllers
         }
 
         [HttpGet]
-        public ActionResult<APIResponse> GetAllVillaNumbers()
+        public ActionResult<APIResponse> GetAllVillaNumbers(string? includeChildProperty = null)
         {
             try
             {
-                IEnumerable<VillaNumberModel> villaNumberList = _villaNumberContext.GetAll();
+                IEnumerable<VillaNumberModel> villaNumberList = _villaNumberContext.GetAll(includeChildProperties: includeChildProperty);
 
                 _response.Result = _mapper.Map<List<VillaNumberViewModel>>(villaNumberList);
 
@@ -39,7 +36,7 @@ namespace MagicVilla.Service.ApiControllers
 
                 return Ok(_response);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _response.IsSuccess = false;
 
@@ -50,20 +47,20 @@ namespace MagicVilla.Service.ApiControllers
         }
 
         [HttpGet("{villaNumber:int}")]
-        public ActionResult<APIResponse> GetVillaNumber(int villaNumber)
+        public ActionResult<APIResponse> GetVillaNumber(int villaNumber, string? includeChildProperty = null)
         {
 
             if (villaNumber <= 0)
                 return BadRequest();
 
-            var villa = _villaNumberContext.Get(x => x.VillaNumber == villaNumber);
+            var villa = _villaNumberContext.Get(x => x.VillaNumber == villaNumber, includeChildProperties: includeChildProperty);
 
             if (villa == null)
                 return NotFound();
 
             try
             {
-                _response.Result = _mapper.Map<List<VillaNumberViewModel>>(villa);
+                _response.Result = _mapper.Map<VillaNumberViewModel>(villa);
 
                 _response.StatusCode = HttpStatusCode.OK;
 
@@ -92,14 +89,13 @@ namespace MagicVilla.Service.ApiControllers
 
             if (_villaNumberContext.Get(x => x.VillaNumber == createVillaNumber.VillaNumber) != null)
             {
-                ModelState.AddModelError("CustomError", "Villa number already exist");
+                ModelState.AddModelError("Errors", "Villa Number already exists.");
                 return BadRequest(ModelState);
-            }
 
-            if (_villaContext.Get(x => x.Id == createVillaNumber.VillaId) == null)
-            {
-                ModelState.AddModelError("CustomError", "Villa id does not exist");
-                return BadRequest(ModelState);
+                //_response.Errors = new List<string>() { "Villa number already exist" };
+                //_response.IsSuccess = false;
+                //_response.StatusCode = HttpStatusCode.BadRequest;
+                //return _response;
             }
 
             try
@@ -170,13 +166,13 @@ namespace MagicVilla.Service.ApiControllers
 
             if (villa == null)
             {
-                ModelState.AddModelError("CustomError", "Villa number not found");
+                ModelState.AddModelError("Errors", "Villa number not found");
                 return NotFound();
             }
 
             if (_villaContext.Get(x => x.Id == updateVillaNumber.VillaId) == null)
             {
-                ModelState.AddModelError("CustomError", "Villa id does not exist");
+                ModelState.AddModelError("Errors", "Villa id does not exist");
                 return BadRequest(ModelState);
             }
 

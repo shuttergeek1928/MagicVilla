@@ -26,7 +26,6 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public ActionResult<APIResponse> GetVillas()
         {
             try
@@ -39,7 +38,7 @@ namespace MagicVilla.Service.Controllers
 
                 return Ok(_response);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _response.IsSuccess = false;
                 _response.Errors = new List<string>() { e.ToString() };
@@ -49,10 +48,9 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpGet("{id:Guid}")]
-        [Authorize]
         public ActionResult<APIResponse> GetVillaById(Guid id)
         {
-            
+
             if (id == Guid.Empty)
                 return BadRequest();
 
@@ -61,8 +59,9 @@ namespace MagicVilla.Service.Controllers
             if (villa == null)
                 return NotFound();
 
-            try { 
-                _response.Result = _mapper.Map<List<VillaViewModel>>(villa);
+            try
+            {
+                _response.Result = _mapper.Map<VillaViewModel>(villa);
 
                 _response.StatusCode = HttpStatusCode.OK;
 
@@ -79,7 +78,6 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
         public ActionResult<APIResponse> CreateNewVilla([FromBody] VillaCreateModel villa)
         {
             if (!ModelState.IsValid)
@@ -118,7 +116,6 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpDelete("{id:Guid}")]
-        [Authorize(Roles = "admin")]
         public ActionResult<APIResponse> DeleteVilla(Guid id)
         {
             if (id == Guid.Empty)
@@ -151,7 +148,6 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "manager")]
         public ActionResult<APIResponse> UpdateVilla(Guid id, [FromBody] VillaUpdateModel updateVilla)
         {
             if (id == Guid.Empty)
@@ -166,11 +162,9 @@ namespace MagicVilla.Service.Controllers
             {
                 updateVilla.LastUpdate = DateTime.Now;
 
-                villa = _mapper.Map<VillaModel>(updateVilla);
+                villa = _mapper.Map<VillaUpdateModel, VillaModel>(updateVilla, villa);
 
                 _villaContext.Update(villa);
-
-                _villaContext.Save();
 
                 _response.Result = villa;
 
@@ -189,6 +183,7 @@ namespace MagicVilla.Service.Controllers
             return _response;
         }
 
+        /*
         [HttpPatch]
         public ActionResult UpdatePartialVilla(Guid id, JsonPatchDocument<VillaViewModel> patchVilla)
         {
@@ -207,5 +202,7 @@ namespace MagicVilla.Service.Controllers
 
             return NoContent();
         }
+        */
     }
 }
+

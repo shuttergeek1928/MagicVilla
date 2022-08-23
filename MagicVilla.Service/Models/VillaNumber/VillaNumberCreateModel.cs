@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MagicVilla.Service.Models.VillaNumber
 {
@@ -16,7 +15,7 @@ namespace MagicVilla.Service.Models.VillaNumber
 
         [Required]
         public DateTime CreatedDate { get; set; }
-        
+
         [Required]
         public DateTime LastUpdated { get; set; }
     }

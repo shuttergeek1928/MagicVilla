@@ -1,6 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-
-namespace MagicVilla.Service.Authorization
+﻿namespace MagicVilla.Service.Authorization
 {
     public class AuthorizationClient
     {
