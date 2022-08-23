@@ -33,7 +33,7 @@ namespace MagicVilla.Web.Services
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.DELETE,
-                Uri = GetApi(_apiResource, _configuration, villaNumber)
+                Uri = GetApi(_apiResource, _configuration, villaNumber, ApiTypes.ApiType.DELETE)
             });
         }
 
@@ -75,14 +75,15 @@ namespace MagicVilla.Web.Services
 
             if (villaNumber != null && villaNumber != 0)
             {
-                if(apiType != ApiTypes.ApiType.PUT)
-                    return uri + $"/{villaNumber}";
-
-                return uri + $"?villaNumber={villaNumber}";
+                if(apiType == ApiTypes.ApiType.PUT || apiType == ApiTypes.ApiType.DELETE)
+                    uri += $"?villaNumber={villaNumber}";
+                else
+                    uri += $"/{villaNumber}";
             }
 
             if (!string.IsNullOrEmpty(includeChildProperty))
-                return uri + $"?includeChildProperty={includeChildProperty}";
+                uri += $"?includeChildProperty={includeChildProperty}";
+
             return uri;
         }
     }

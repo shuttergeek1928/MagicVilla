@@ -89,8 +89,13 @@ namespace MagicVilla.Service.ApiControllers
 
             if (_villaNumberContext.Get(x => x.VillaNumber == createVillaNumber.VillaNumber) != null)
             {
-                ModelState.AddModelError("CustomError", "Villa number already exist");
+                ModelState.AddModelError("Errors", "Villa Number already exists.");
                 return BadRequest(ModelState);
+
+                //_response.Errors = new List<string>() { "Villa number already exist" };
+                //_response.IsSuccess = false;
+                //_response.StatusCode = HttpStatusCode.BadRequest;
+                //return _response;
             }
 
             try
@@ -161,13 +166,13 @@ namespace MagicVilla.Service.ApiControllers
 
             if (villa == null)
             {
-                ModelState.AddModelError("CustomError", "Villa number not found");
+                ModelState.AddModelError("Errors", "Villa number not found");
                 return NotFound();
             }
 
             if (_villaContext.Get(x => x.Id == updateVillaNumber.VillaId) == null)
             {
-                ModelState.AddModelError("CustomError", "Villa id does not exist");
+                ModelState.AddModelError("Errors", "Villa id does not exist");
                 return BadRequest(ModelState);
             }
 

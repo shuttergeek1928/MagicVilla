@@ -1,47 +1,52 @@
 ﻿@model IEnumerable<MagicVilla.Web.Models.Villa.VillaViewModel>
-<br />
-<div class="row pb-2">
-    <div class="col">
-        <h1 class="text-primary">Villa Lists</h1>
-    </div>
-    <div class="col text-end pt-1">
-        <a class="btn btn-outline-primary" asp-controller="Villa" asp-action="CreateVilla"><i class="bi bi-plus"></i>Create New Villa</a>
-    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Occupancy
-                </th>
-                <th>
-                    Price
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var item in Model)
-            {
+@{
+}
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Villa Lists</h1>
+        </div>
+        <div class="col text-end pt-1">
+            <a class="btn btn-outline-primary" asp-controller="Villa" asp-action="CreateVilla"><i class="bi bi-plus"></i>Create New Villa</a>
+        </div>
+
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @item.Name, @item.Id
-                    </td>
-                    <td>
-                        @item.Occupancy
-                    </td>
-                    <td>
-                        @((item.Rate).ToString("c"))
-                    </td>
-                    <td>
-                        <a class="btn btn-outline-success" asp-controller="Villa" asp-action="UpdateVilla" asp-route-villaId="@item.Id"><i class="bi bi-pencil"></i></a>
-                        <a class="btn btn-outline-danger" asp-controller="Villa" asp-action="DeleteVilla" asp-route-villaId="@item.Id"><i class="bi bi-trash"></i></a>
-                    </td>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Occupancy
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Name, @item.Id
+                        </td>
+                        <td>
+                            @item.Occupancy
+                        </td>
+                        <td>
+                            @((item.Rate).ToString("c"))
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-success" asp-controller="Villa" asp-action="UpdateVilla" asp-route-villaId="@item.Id"><i class="bi bi-pencil"></i></a>
+                            <a class="btn btn-outline-danger" asp-controller="Villa" asp-action="DeleteVilla" asp-route-villaId="@item.Id"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
