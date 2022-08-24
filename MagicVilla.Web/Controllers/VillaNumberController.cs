@@ -38,9 +38,12 @@ namespace MagicVilla.Web.Controllers
 
         public async Task<IActionResult> CreateVillaNumber()
         {
-            var villaNames = await GetVillaNames();
+            var villaCreateVM = new VillaNumberCreateViewModel()
+            {
+                VillaList = (IEnumerable<SelectListItem>) await GetVillaNames()
+            };
 
-            return View(villaNames);
+            return View(villaCreateVM);
         }
 
         [HttpPost]
@@ -67,35 +70,42 @@ namespace MagicVilla.Web.Controllers
 
         public async Task<IActionResult> UpdateVillaNumber(int villaNumber)
         {
-            var response = await _villaNumberService.GetAsync<APIResponse>(villaNumber);
+            var villaNum = await GetVillaNumber(villaNumber, "Villa");
 
-            var villa = new VillaNumberModel();
+            var villaList = await GetVillaNames();
 
-            if (response != null && response.IsSuccess)
+            VillaNumberUpdateViewModel villaNumberUpdateViewModel = new VillaNumberUpdateViewModel()
             {
-                villa = JsonConvert.DeserializeObject<VillaNumberModel>(Convert.ToString(response.Result));
-                
-                return View(_mapper.Map<VillaNumberModel>(villa));
-            }
+                VillaList = villaList,
+                VillaNumber = _mapper.Map<VillaNumberUpdateModel>(villaNum)
+            };
+
+            if (villaNumberUpdateViewModel != null)
+                return View(villaNumberUpdateViewModel);
 
             return NotFound();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateVillaNumber(int villaNumber, [FromForm] VillaNumberUpdateModel villaNumberUpdateModel)
+        public async Task<IActionResult> UpdateVillaNumber(int villaNumber, [FromForm] VillaNumberUpdateViewModel villaNumberUpdateViewModel)
         {
             if (ModelState.IsValid)
             {
-                var response = await _villaNumberService.UpdateAsync<APIResponse>(villaNumber, villaNumberUpdateModel);
+                var villaUpdate = _mapper.Map<VillaNumberUpdateModel>(villaNumberUpdateViewModel);
+
+                var response = await _villaNumberService.UpdateAsync<APIResponse>(villaNumber, villaUpdate);
 
                 if (response != null && response.IsSuccess)
                 {
-                    return RedirectToAction("VillaIndex");
+                    return RedirectToAction("VillaNumberIndex");
                 }
+
+                if (response.Errors.Count > 0)
+                    ModelState.AddModelError("ErrorMessage", response.Errors.FirstOrDefault());
             }
 
-            return View(_mapper.Map<VillaNumberViewModel>(villaNumberUpdateModel));
+            return View(villaNumberUpdateViewModel);
         }
 
         public async Task<IActionResult> DeleteVillaNumber(int villaNumber)
@@ -115,7 +125,7 @@ namespace MagicVilla.Web.Controllers
 
                 if (response != null && response.IsSuccess)
                 {
-                    return RedirectToAction("VillaIndex");
+                    return RedirectToAction("VillaNumberIndex");
                 }
             }
 
@@ -124,23 +134,23 @@ namespace MagicVilla.Web.Controllers
             return View(errResponse);
         }
 
-        private async Task<VillaNumberCreateViewModel> GetVillaNames()
+        private async Task<IEnumerable<SelectListItem>> GetVillaNames()
         {
-            VillaNumberCreateViewModel villaNumberCreateViewModel = new VillaNumberCreateViewModel();
-
             var response = await _villaService.GetAllAsync<APIResponse>();
-
+            
             if (response != null && response.IsSuccess)
             {
-                villaNumberCreateViewModel.VillaList =
-                    JsonConvert.DeserializeObject<List<VillaViewModel>>(Convert.ToString(response.Result))
-                    .Select(i => new SelectListItem
-                    {
-                        Text = i.Name,
-                        Value = i.Id.ToString()
-                    });
+                var villaList = JsonConvert.DeserializeObject<List<VillaViewModel>>(Convert.ToString(response.Result))
+                                .Select(i => new SelectListItem
+                                {
+                                    Text = i.Name,
+                                    Value = i.Id.ToString()
+                                });
+
+                return villaList;
             }
-            return villaNumberCreateViewModel;
+
+            return null;
         }
 
         private async Task<VillaNumberViewModel> GetVillaNumber(int villaNumber, string? includeChildProperty = null)

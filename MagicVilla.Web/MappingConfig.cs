@@ -19,6 +19,11 @@ namespace MagicVilla.Web
             CreateMap<VillaNumberModel, VillaNumberViewModel>().ReverseMap();
             CreateMap<VillaNumberModel, VillaNumberCreateModel>().ReverseMap();
             CreateMap<VillaNumberModel, VillaNumberUpdateModel>().ReverseMap();
+            CreateMap<VillaNumberViewModel, VillaNumberUpdateModel>().ForMember(d => d.VillaId, opt => opt.MapFrom(s => s.Villa.Id)).ReverseMap();
+            CreateMap<VillaNumberUpdateViewModel, VillaNumberUpdateModel>()
+                .ForMember(d => d.VillaNumber, opt => opt.MapFrom(s => s.VillaNumber.VillaNumber))
+                .ForMember(d => d.VillaId, opt => opt.MapFrom(s => s.VillaNumber.VillaId))
+                .ForMember(d => d.SpecialDetails, opt => opt.MapFrom(s => s.VillaNumber.SpecialDetails));
 
             CreateMap<RegistrationRequestModel, Users>();
         }

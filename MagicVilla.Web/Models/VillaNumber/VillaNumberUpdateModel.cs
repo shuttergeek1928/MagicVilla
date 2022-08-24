@@ -11,8 +11,5 @@ namespace MagicVilla.Web.Models.VillaNumber
         public Guid VillaId { get; set; }
 
         public string SpecialDetails { get; set; }
-
-        [Required]
-        public DateTime LastUpdated { get; set; }
     }
 }
