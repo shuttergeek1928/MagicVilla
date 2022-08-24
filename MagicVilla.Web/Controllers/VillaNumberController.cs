@@ -56,16 +56,21 @@ namespace MagicVilla.Web.Controllers
 
                 if (response != null && response.IsSuccess) //if (response != null && response.IsSuccess && response.Errors.Count == 0) - Not the good way of handling the response erros. - Refer BaseService for betther implementation
                 {
+                    TempData["success"] = "Villa Number Created Successfully";
                     return RedirectToAction("VillaNumberIndex");
                 }
 
+                TempData["error"] = "Error encountered";
                 if (response.Errors.Count > 0)
                     ModelState.AddModelError("ErrorMessage", response.Errors.FirstOrDefault());
             }
 
-            var villaNames = await GetVillaNames();
+            var villaCreateVM = new VillaNumberCreateViewModel()
+            {
+                VillaList = (IEnumerable<SelectListItem>)await GetVillaNames()
+            };
 
-            return View(villaNames);
+            return View(villaCreateVM);
         }
 
         public async Task<IActionResult> UpdateVillaNumber(int villaNumber)
@@ -98,9 +103,11 @@ namespace MagicVilla.Web.Controllers
 
                 if (response != null && response.IsSuccess)
                 {
+                    TempData["success"] = "Villa Number Updated Successfully";
                     return RedirectToAction("VillaNumberIndex");
                 }
 
+                TempData["error"] = "Error encountered";
                 if (response.Errors.Count > 0)
                     ModelState.AddModelError("ErrorMessage", response.Errors.FirstOrDefault());
             }
@@ -125,8 +132,13 @@ namespace MagicVilla.Web.Controllers
 
                 if (response != null && response.IsSuccess)
                 {
+                    TempData["success"] = "Villa Number Deleted Successfully";
                     return RedirectToAction("VillaNumberIndex");
                 }
+
+                TempData["error"] = "Error encountered";
+                if (response.Errors.Count > 0)
+                    ModelState.AddModelError("ErrorMessage", response.Errors.FirstOrDefault());
             }
 
             var errResponse = await GetVillaNumber(villaNumber, includeChildProperty: "Villa");
