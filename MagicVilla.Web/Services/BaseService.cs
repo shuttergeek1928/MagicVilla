@@ -3,6 +3,7 @@ using MagicVilla.Web.Models;
 using MagicVilla.Web.Services.IServices;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace MagicVilla.Web.Services
@@ -16,7 +17,7 @@ namespace MagicVilla.Web.Services
             HttpClient = httpClientFactory;
             Response = new();
         }
-        
+
         public async Task<T> SendApiRequestAsync<T>(APIRequest request)
         {
             try
@@ -26,10 +27,10 @@ namespace MagicVilla.Web.Services
                 HttpRequestMessage message = new HttpRequestMessage();
 
                 message.Headers.Add("Accept", "application/json");
-                
+
                 message.RequestUri = new Uri(request.Uri);
 
-                if(request.Data != null)
+                if (request.Data != null)
                     message.Content = new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json");
 
                 switch (request.ApiType)
@@ -50,6 +51,11 @@ namespace MagicVilla.Web.Services
 
                 HttpResponseMessage apiResponse = null;
 
+                if (!string.IsNullOrWhiteSpace(request.Token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.Token);
+                }
+
                 apiResponse = await client.SendAsync(message);
 
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
@@ -58,7 +64,7 @@ namespace MagicVilla.Web.Services
                 {
                     APIResponse APIResponseContent = JsonConvert.DeserializeObject<APIResponse>(apiContent);
 
-                    if( apiResponse.StatusCode == HttpStatusCode.NotFound ||
+                    if (apiResponse.StatusCode == HttpStatusCode.NotFound ||
                         apiResponse.StatusCode == HttpStatusCode.BadRequest)
                     {
                         APIResponseContent.StatusCode = apiResponse.StatusCode;
@@ -72,18 +78,18 @@ namespace MagicVilla.Web.Services
                         return resObject;
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     var exceptionResponse = JsonConvert.DeserializeObject<T>(apiContent);
 
                     return exceptionResponse;
                 }
-                
+
                 var apiResponseContent = JsonConvert.DeserializeObject<T>(apiContent);
-                
+
                 return apiResponseContent;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 var errResponse = new APIResponse
                 {

@@ -4,10 +4,10 @@ namespace MagicVilla.Web.Services.IServices
 {
     public interface IVillaNumberService
     {
-        Task<T> GetAllAsync<T>(string? includeChildProp = null);
-        Task<T> GetAsync<T>(int villaNumber, string? includeChildProp = null);
-        Task<T> CreateAsync<T>(VillaNumberCreateModel villaNumberCreateModel);
-        Task<T> UpdateAsync<T>(int villaNumber, VillaNumberUpdateModel villaNumberUpdateModel);
-        Task<T> DeleteAsync<T>(int villaNumber);
+        Task<T> GetAllAsync<T>(string token, string? includeChildProp = null);
+        Task<T> GetAsync<T>(string token, int villaNumber, string? includeChildProp = null);
+        Task<T> CreateAsync<T>(VillaNumberCreateModel villaNumberCreateModel, string token);
+        Task<T> UpdateAsync<T>(int villaNumber, VillaNumberUpdateModel villaNumberUpdateModel, string token);
+        Task<T> DeleteAsync<T>(int villaNumber, string token);
     }
 }

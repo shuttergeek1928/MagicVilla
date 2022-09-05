@@ -25,10 +25,10 @@ namespace MagicVilla.Service.Repository
 
             if (filter != null)
                 entities = entities.Where(filter);
-            
+
             if (includeChildProperties != null)
             {
-                foreach(var subProperty in includeChildProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var subProperty in includeChildProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     entities = entities.Include(subProperty);
                 }

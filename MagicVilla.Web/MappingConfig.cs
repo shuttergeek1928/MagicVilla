@@ -25,7 +25,7 @@ namespace MagicVilla.Web
                 .ForMember(d => d.VillaId, opt => opt.MapFrom(s => s.VillaNumber.VillaId))
                 .ForMember(d => d.SpecialDetails, opt => opt.MapFrom(s => s.VillaNumber.SpecialDetails));
 
-            CreateMap<RegistrationRequestModel, Users>();
+            CreateMap<RegistrationRequestModel, Users>().ReverseMap();
         }
     }
 }

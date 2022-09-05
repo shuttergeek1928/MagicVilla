@@ -16,59 +16,64 @@ namespace MagicVilla.Web.Services
             _configuration = configuration;
         }
 
-        public Task<T> CreateAsync<T>(VillaCreateModel villaCreateModel)
+        public Task<T> CreateAsync<T>(VillaCreateModel villaCreateModel, string token)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.POST,
                 Data = villaCreateModel,
-                Uri = GetApi("VillaApi", _configuration)
+                Uri = GetApi("VillaApi", _configuration),
+                Token = token
             });
         }
 
-        public Task<T> DeleteAsync<T>(Guid id)
+        public Task<T> DeleteAsync<T>(Guid id, string token)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.DELETE,
-                Uri = GetApi("VillaApi", _configuration, id)
+                Uri = GetApi("VillaApi", _configuration, id),
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.GET,
-                Uri = GetApi("VillaApi", _configuration)
+                Uri = GetApi("VillaApi", _configuration),
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(Guid id)
+        public Task<T> GetAsync<T>(Guid id, string token)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.GET,
-                Uri = GetApi("VillaApi", _configuration, id)
+                Uri = GetApi("VillaApi", _configuration, id),
+                Token = token
             });
 
         }
 
-        public Task<T> UpdateAsync<T>(Guid id, VillaUpdateModel villaUpdateModel)
+        public Task<T> UpdateAsync<T>(Guid id, VillaUpdateModel villaUpdateModel, string token)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.PUT,
                 Data = villaUpdateModel,
-                Uri = GetApi("VillaApi", _configuration, id, ApiTypes.ApiType.PUT)
+                Uri = GetApi("VillaApi", _configuration, id, ApiTypes.ApiType.PUT),
+                Token = token
             });
         }
 
         public string GetApi(string resource, IConfiguration configuration, Guid? id = (Guid?)null, ApiTypes.ApiType apiType = ApiTypes.ApiType.GET)
         {
-            if(id != null && id != Guid.Empty)
+            if (id != null && id != Guid.Empty)
             {
-                if(apiType != ApiTypes.ApiType.PUT)
+                if (apiType != ApiTypes.ApiType.PUT)
                     return configuration.GetValue<string>("ServiceUrls:" + resource) + $"/{id}";
 
                 return configuration.GetValue<string>("ServiceUrls:" + resource) + $"?id={id}";

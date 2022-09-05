@@ -2,6 +2,7 @@
 using MagicVilla.Service.Models;
 using MagicVilla.Service.Models.VillaNumber;
 using MagicVilla.Service.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 namespace MagicVilla.Service.ApiControllers
@@ -24,6 +25,7 @@ namespace MagicVilla.Service.ApiControllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin, manager, broker")]
         public ActionResult<APIResponse> GetAllVillaNumbers(string? includeChildProperty = null)
         {
             try
@@ -47,6 +49,7 @@ namespace MagicVilla.Service.ApiControllers
         }
 
         [HttpGet("{villaNumber:int}")]
+        [Authorize(Roles = "admin, manager, broker")]
         public ActionResult<APIResponse> GetVillaNumber(int villaNumber, string? includeChildProperty = null)
         {
 
@@ -77,6 +80,7 @@ namespace MagicVilla.Service.ApiControllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin, manager")]
         public ActionResult<APIResponse> CreateNewVillaNumber([FromBody] VillaNumberCreateModel createVillaNumber)
         {
             if (!ModelState.IsValid)
@@ -125,6 +129,7 @@ namespace MagicVilla.Service.ApiControllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "admin, manager")]
         public ActionResult<APIResponse> DeleteVilla(int villaNumber)
         {
             if (villaNumber <= 0)
@@ -157,6 +162,7 @@ namespace MagicVilla.Service.ApiControllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "admin, manager")]
         public ActionResult<APIResponse> UpdateVillaNumber(int villaNumber, [FromBody] VillaNumberUpdateModel updateVillaNumber)
         {
             if (villaNumber <= 0)

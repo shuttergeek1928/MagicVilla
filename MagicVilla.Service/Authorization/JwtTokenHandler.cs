@@ -11,6 +11,7 @@ namespace MagicVilla.Service.Authorization
         public AuthorizationClient GenerateToken(string secretKey, Users user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
+
             var key = Encoding.ASCII.GetBytes(secretKey);
 
             var tokenDecriptor = new SecurityTokenDescriptor
@@ -28,6 +29,7 @@ namespace MagicVilla.Service.Authorization
             var token = tokenHandler.CreateToken(tokenDecriptor);
 
             var loginToken = tokenHandler.WriteToken(token);
+
             return new AuthorizationClient()
             {
                 Token = loginToken

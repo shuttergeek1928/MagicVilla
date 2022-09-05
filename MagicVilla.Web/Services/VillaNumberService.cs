@@ -18,51 +18,56 @@ namespace MagicVilla.Web.Services
             _apiResource = "VillaNumberApi";
         }
 
-        public Task<T> CreateAsync<T>(VillaNumberCreateModel villaNumberCreateModel)
+        public Task<T> CreateAsync<T>(VillaNumberCreateModel villaNumberCreateModel, string token)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.POST,
                 Data = villaNumberCreateModel,
-                Uri = GetApi(_apiResource, _configuration)
+                Uri = GetApi(_apiResource, _configuration),
+                Token = token
             });
         }
 
-        public Task<T> DeleteAsync<T>(int villaNumber)
+        public Task<T> DeleteAsync<T>(int villaNumber, string token)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.DELETE,
-                Uri = GetApi(_apiResource, _configuration, villaNumber, ApiTypes.ApiType.DELETE)
+                Uri = GetApi(_apiResource, _configuration, villaNumber, ApiTypes.ApiType.DELETE),
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>(string? includeChildProperty = null)
+        public Task<T> GetAllAsync<T>(string token, string? includeChildProperty = null)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.GET,
-                Uri = GetApi(_apiResource, _configuration, includeChildProperty: includeChildProperty)
+                Uri = GetApi(_apiResource, _configuration, includeChildProperty: includeChildProperty),
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int villaNumber, string? includeChildProperty = null)
+        public Task<T> GetAsync<T>(string token, int villaNumber, string? includeChildProperty = null)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.GET,
-                Uri = GetApi(_apiResource, _configuration, villaNumber, includeChildProperty: includeChildProperty)
+                Uri = GetApi(_apiResource, _configuration, villaNumber, includeChildProperty: includeChildProperty),
+                Token = token
             });
 
         }
 
-        public Task<T> UpdateAsync<T>(int villaNumber, VillaNumberUpdateModel villaNumberUpdateModel)
+        public Task<T> UpdateAsync<T>(int villaNumber, VillaNumberUpdateModel villaNumberUpdateModel, string token)
         {
             return SendApiRequestAsync<T>(new APIRequest
             {
                 ApiType = ApiTypes.ApiType.PUT,
                 Data = villaNumberUpdateModel,
-                Uri = GetApi(_apiResource, _configuration, villaNumber, ApiTypes.ApiType.PUT)
+                Uri = GetApi(_apiResource, _configuration, villaNumber, ApiTypes.ApiType.PUT),
+                Token = token
             });
         }
 
@@ -75,7 +80,7 @@ namespace MagicVilla.Web.Services
 
             if (villaNumber != null && villaNumber != 0)
             {
-                if(apiType == ApiTypes.ApiType.PUT || apiType == ApiTypes.ApiType.DELETE)
+                if (apiType == ApiTypes.ApiType.PUT || apiType == ApiTypes.ApiType.DELETE)
                     uri += $"?villaNumber={villaNumber}";
                 else
                     uri += $"/{villaNumber}";

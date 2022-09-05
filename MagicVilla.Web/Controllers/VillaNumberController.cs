@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
-using MagicVilla.Web.Services.IServices;
-using MagicVilla.Web.Models.VillaNumber;
 using MagicVilla.Web.Models;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using MagicVilla.Web.Models.Villa;
+using MagicVilla.Web.Models.VillaNumber;
+using MagicVilla.Web.Services.IServices;
+using MagicVilla.Web.SessionTokenStore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace MagicVilla.Web.Controllers
 {
@@ -14,21 +16,24 @@ namespace MagicVilla.Web.Controllers
         private readonly IMapper _mapper;
         private readonly IVillaNumberService _villaNumberService;
         private readonly IVillaService _villaService;
+        private readonly string _token;
 
-        public VillaNumberController(IMapper mapper, IVillaService villaService, IVillaNumberService villaNumberService)
+        public VillaNumberController(IMapper mapper, IVillaService villaService, IVillaNumberService villaNumberService, ISessionToken session)
         {
             _mapper = mapper;
             _villaService = villaService;
             _villaNumberService = villaNumberService;
+            _token = session.ReadToken();
         }
 
+        [Authorize(Roles = "admin, manager, broker")]
         public async Task<IActionResult> VillaNumberIndex()
         {
             List<VillaNumberViewModel> villaNumbers = new();
 
-            var response = await _villaNumberService.GetAllAsync<APIResponse>("Villa");
+            var response = await _villaNumberService.GetAllAsync<APIResponse>(_token, "Villa");
 
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 villaNumbers = JsonConvert.DeserializeObject<List<VillaNumberViewModel>>(Convert.ToString(response.Result));
             }
@@ -36,11 +41,12 @@ namespace MagicVilla.Web.Controllers
             return View(villaNumbers);
         }
 
+        [Authorize(Roles = "admin, manager")]
         public async Task<IActionResult> CreateVillaNumber()
         {
             var villaCreateVM = new VillaNumberCreateViewModel()
             {
-                VillaList = (IEnumerable<SelectListItem>) await GetVillaNames()
+                VillaList = (IEnumerable<SelectListItem>)await GetVillaNames()
             };
 
             return View(villaCreateVM);
@@ -48,11 +54,12 @@ namespace MagicVilla.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, manager")]
         public async Task<IActionResult> CreateVillaNumber([FromForm] VillaNumberCreateViewModel villaNumberCreateModel)
         {
             if (ModelState.IsValid)
             {
-                var response = await _villaNumberService.CreateAsync<APIResponse>(villaNumberCreateModel.VillaNumber);
+                var response = await _villaNumberService.CreateAsync<APIResponse>(villaNumberCreateModel.VillaNumber, _token);
 
                 if (response != null && response.IsSuccess) //if (response != null && response.IsSuccess && response.Errors.Count == 0) - Not the good way of handling the response erros. - Refer BaseService for betther implementation
                 {
@@ -73,6 +80,7 @@ namespace MagicVilla.Web.Controllers
             return View(villaCreateVM);
         }
 
+        [Authorize(Roles = "admin, manager")]
         public async Task<IActionResult> UpdateVillaNumber(int villaNumber)
         {
             var villaNum = await GetVillaNumber(villaNumber, "Villa");
@@ -93,13 +101,14 @@ namespace MagicVilla.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, manager")]
         public async Task<IActionResult> UpdateVillaNumber(int villaNumber, [FromForm] VillaNumberUpdateViewModel villaNumberUpdateViewModel)
         {
             if (ModelState.IsValid)
             {
                 var villaUpdate = _mapper.Map<VillaNumberUpdateModel>(villaNumberUpdateViewModel);
 
-                var response = await _villaNumberService.UpdateAsync<APIResponse>(villaNumber, villaUpdate);
+                var response = await _villaNumberService.UpdateAsync<APIResponse>(villaNumber, villaUpdate, _token);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -115,6 +124,7 @@ namespace MagicVilla.Web.Controllers
             return View(villaNumberUpdateViewModel);
         }
 
+        [Authorize(Roles = "admin, manager")]
         public async Task<IActionResult> DeleteVillaNumber(int villaNumber)
         {
             var response = await GetVillaNumber(villaNumber, includeChildProperty: "Villa");
@@ -124,11 +134,12 @@ namespace MagicVilla.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, manager")]
         public async Task<IActionResult> DeleteVillaNumber(int villaNumber, bool delete = true)
         {
             if (delete)
             {
-                var response = await _villaNumberService.DeleteAsync<APIResponse>(villaNumber);
+                var response = await _villaNumberService.DeleteAsync<APIResponse>(villaNumber, _token);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -148,8 +159,8 @@ namespace MagicVilla.Web.Controllers
 
         private async Task<IEnumerable<SelectListItem>> GetVillaNames()
         {
-            var response = await _villaService.GetAllAsync<APIResponse>();
-            
+            var response = await _villaService.GetAllAsync<APIResponse>(_token);
+
             if (response != null && response.IsSuccess)
             {
                 var villaList = JsonConvert.DeserializeObject<List<VillaViewModel>>(Convert.ToString(response.Result))
@@ -172,9 +183,9 @@ namespace MagicVilla.Web.Controllers
             var response = new APIResponse();
 
             if (includeChildProperty != null)
-                response = await _villaNumberService.GetAsync<APIResponse>(villaNumber, includeChildProperty);
+                response = await _villaNumberService.GetAsync<APIResponse>(_token, villaNumber, includeChildProperty);
             else
-                response = await _villaNumberService.GetAsync<APIResponse>(villaNumber);
+                response = await _villaNumberService.GetAsync<APIResponse>(_token, villaNumber);
 
             if (response != null && response.IsSuccess)
             {

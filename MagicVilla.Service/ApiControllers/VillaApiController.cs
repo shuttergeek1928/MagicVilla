@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using MagicVilla.Service.Data;
 using MagicVilla.Service.Models;
 using MagicVilla.Service.Models.Villa;
 using MagicVilla.Service.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -26,6 +24,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin, manager, broker")]
         public ActionResult<APIResponse> GetVillas()
         {
             try
@@ -48,6 +47,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpGet("{id:Guid}")]
+        [Authorize(Roles = "admin, manager, broker")]
         public ActionResult<APIResponse> GetVillaById(Guid id)
         {
 
@@ -78,6 +78,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin, manager")]
         public ActionResult<APIResponse> CreateNewVilla([FromBody] VillaCreateModel villa)
         {
             if (!ModelState.IsValid)
@@ -116,6 +117,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpDelete("{id:Guid}")]
+        [Authorize(Roles = "admin, manager")]
         public ActionResult<APIResponse> DeleteVilla(Guid id)
         {
             if (id == Guid.Empty)
@@ -148,6 +150,7 @@ namespace MagicVilla.Service.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "admin, manager")]
         public ActionResult<APIResponse> UpdateVilla(Guid id, [FromBody] VillaUpdateModel updateVilla)
         {
             if (id == Guid.Empty)
